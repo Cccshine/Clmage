@@ -1,0 +1,91 @@
+div{
+    box-sizing: border-box;
+}
+.cimage-main {
+    margin:10px 0;
+    position: relative;
+    float: left;
+    img{
+        width: 500px;
+        height: 500px;
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+}
+.cimage-box {        
+    position: absolute;
+    top:0;
+    left: 0;
+    z-index: 2;
+    cursor: move;
+}
+.cimage-shadow {
+    // background: #000;
+    // opacity: 0.4;
+    display: none;
+    position: absolute;
+    z-index: 0;
+}
+
+.cimage-border{
+    // opacity: 0.5;
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.bd-top{
+    border-top: 1px dotted #000;
+}
+.bd-right{
+    border-right: 1px dotted #000;
+}
+.bd-bottom{
+    border-bottom: 1px dotted #000;
+}
+.bd-left{
+    border-left: 1px dotted #000;
+}
+.cimage-handle {    
+    display: none;    
+    background: #fff;
+    border: 1px solid #000;
+    // opacity: 0.5;
+    position: absolute;
+    // width: 5px;
+    // height: 5px;
+}
+.hd-n{
+    cursor: n-resize;
+}
+.hd-e{
+    cursor: e-resize;
+}
+.hd-s{
+    cursor: s-resize;
+}
+.hd-w{
+    cursor: w-resize;
+}
+.hd-ne{
+    cursor: ne-resize;
+}
+.hd-se{
+    cursor: se-resize;
+}
+.hd-sw{
+    cursor: sw-resize;
+}
+.hd-nw{
+    cursor: nw-resize;
+}
+.cimage-preview-box{
+    position: relative;
+    float: left;
+    margin: 10px 0 0 30px;
+    overflow: hidden;
+    .cimage-preview{
+        position: absolute;
+    }
+}
