@@ -24,7 +24,7 @@ module.exports = {
 		port: 8080
 	},
 	//在控制台的sources下，点开可以看到webpack://目录，里面可以直接看到我们开发态的源代码，这样方便我们直接在浏览器中打断点调试
-	devtool: "inline-source-map",
+	devtool: process.env.NODE_ENV === 'development' ? "cheap-module-source-map" : "source-map",
 	entry: path.resolve(__dirname, './src/CImage.js'),
 	output: {
 		// path:__dirname+'/dist',
