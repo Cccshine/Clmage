@@ -80,7 +80,7 @@ class CImage {
 		const createClipBox = (startPos,eleSize,interval,p,limit,limitSize,store)=>{
 			return (e)=>{
 				//鼠标移动距离
-				let disPos = {"X":(e.pageX - startPos.X),"Y":(e.pageY - startPos.Y)};
+				let disPos = {"X":(e.clientX - startPos.X),"Y":(e.clientY - startPos.Y)};
 				//固定宽高时是否由X方向主导
 				let leadByX = p ? (Math.abs(disPos.X)/Math.abs(disPos.Y)  < p  ? false : true):false;
 				//截取框的宽高值(limit标识是否达到边界)
@@ -186,12 +186,13 @@ class CImage {
 		this.options.element.onmousedown = (e)=>{
 			if(this.disable)
 				return;
-			let startPos = {"X":e.pageX,"Y":e.pageY};
+			let startPos = {"X":e.clientX,"Y":e.clientY};
+			let rect = this.options.element.getBoundingClientRect();
 			let eleSize = {
-				"width":this.options.element.offsetWidth,
-				"height":this.options.element.offsetHeight,
-				"left":this.getDocPos(this.options.element).left,
-				"top":this.getDocPos(this.options.element).top
+				"width":rect.width,
+				"height":rect.height,
+				"left":rect.left,
+				"top":rect.top
 			};
 			let interval = {"X":(startPos.X - eleSize.left),"Y":(startPos.Y - eleSize.top)}
 			let p = this.options.aspectRatio;
@@ -222,8 +223,8 @@ class CImage {
 		const clipBoxMove = (disPos)=>{
 			return (e) =>{
 				//限制截取框移动范围
-				let left = e.pageX - disPos.X;
-				let top = e.pageY - disPos.Y;
+				let left = e.clientX - disPos.X;
+				let top = e.clientY - disPos.Y;
 				if(left<=0){
                     left=0;
                 }else if(left>=(this.options.element.offsetWidth-this.clipBox.offsetWidth)){
@@ -245,7 +246,7 @@ class CImage {
 		this.clipBox.addEventListener('mousedown', (e)=>{
 			if(this.disable || !this.options.allowMove || e.target.className.includes('cimage-handle'))
 				return;
-			let disPos = {"X":(e.pageX -this.clipBox.offsetLeft),"Y":(e.pageY - this.clipBox.offsetTop)};
+			let disPos = {"X":(e.clientX -this.clipBox.offsetLeft),"Y":(e.clientY - this.clipBox.offsetTop)};
 			let fnMove = clipBoxMove(disPos);
 			document.addEventListener('mousemove', fnMove, false);
 			let This = this;
@@ -258,7 +259,7 @@ class CImage {
 		const clipBoxResize = (startPos,startSize,cursor,p,interval,eleSize,limit,limitSize,store)=>{
 			return (e)=>{
 				//鼠标移动距离
-				let disPos = {"X":(e.pageX - startPos.X),"Y":(e.pageY - startPos.Y)};
+				let disPos = {"X":(e.clientX - startPos.X),"Y":(e.clientY - startPos.Y)};
 				let leadByX = null;
 				let size = null;
 				if(cursor.match(/nw|sw|se|ne/)){
@@ -400,15 +401,16 @@ class CImage {
 		this.clipBox.addEventListener('mousedown',(e)=>{
 			if(this.disable || !this.options.allowResize || !e.target.className.includes('cimage-handle'))
 				return false;
-			let startPos = {"X":e.pageX,"Y":e.pageY};
+			let startPos = {"X":e.clientX,"Y":e.clientY};
 			let interval = {"X":0,"Y":0}
 			let cursor = this.getStyle(e.target,'cursor');
 			let p = this.options.aspectRatio;
+			let rect = this.options.element.getBoundingClientRect();
 			let eleSize = {
-				"width":this.options.element.offsetWidth,
-				"height":this.options.element.offsetHeight,
-				"left":this.getDocPos(this.options.element).left,
-				"top":this.getDocPos(this.options.element).top
+				"width":rect.width,
+				"height":rect.height,
+				"left":rect.left,
+				"top":rect.top
 			};
 			let startSize = {
 				"width":this.clipBox.offsetWidth,
@@ -418,39 +420,39 @@ class CImage {
 			};			
 			switch (cursor){
 				case 'nw-resize':
-					startPos = {"X":e.pageX+startSize.width,"Y":e.pageY+startSize.height};
+					startPos = {"X":e.clientX+startSize.width,"Y":e.clientY+startSize.height};
 					interval = {"X":startSize.left+startSize.width,"Y":startSize.top+startSize.height};
 					break;
 				case 'ne-resize':
-					startPos = {"X":e.pageX - startSize.width,"Y":e.pageY+startSize.height};
+					startPos = {"X":e.clientX - startSize.width,"Y":e.clientY+startSize.height};
 					interval = {"X":startSize.left,"Y":startSize.top+startSize.height};
 					break;
 				case 'sw-resize':
-					startPos = {"X":e.pageX+startSize.width,"Y":e.pageY-startSize.height};
+					startPos = {"X":e.clientX+startSize.width,"Y":e.clientY-startSize.height};
 					interval = {"X":startSize.left+startSize.width,"Y":startSize.top};
 					break;
 				case 'se-resize':
-					startPos = {"X":e.pageX-startSize.width,"Y":e.pageY-startSize.height};
+					startPos = {"X":e.clientX-startSize.width,"Y":e.clientY-startSize.height};
 					interval = {"X":startSize.left,"Y":startSize.top};
 					break;
 				case 'n-resize':
-					startPos = {"X":e.pageX-startSize.width/2,"Y":e.pageY+startSize.height};
+					startPos = {"X":e.clientX-startSize.width/2,"Y":e.clientY+startSize.height};
 					interval = {"X":startSize.left,"Y":startSize.top+startSize.height};
 					break;
 				case 'e-resize':
-					startPos = {"X":e.pageX-startSize.width,"Y":e.pageY-startSize.height/2};
+					startPos = {"X":e.clientX-startSize.width,"Y":e.clientY-startSize.height/2};
 					interval = {"X":startSize.left,"Y":startSize.top};
 					break;
 				case 's-resize':
-					startPos = {"X":e.pageX-startSize.width/2,"Y":e.pageY-startSize.height};
+					startPos = {"X":e.clientX-startSize.width/2,"Y":e.clientY-startSize.height};
 					interval = {"X":startSize.left,"Y":startSize.top};
 					break;
 				case 'w-resize':
-					startPos = {"X":e.pageX+startSize.width,"Y":e.pageY-startSize.height/2};
+					startPos = {"X":e.clientX+startSize.width,"Y":e.clientY-startSize.height/2};
 					interval = {"X":startSize.left+startSize.width,"Y":startSize.top};
 					break;
 				default:
-					startPos = {"X":e.pageX,"Y":e.pageY};
+					startPos = {"X":e.clientX,"Y":e.clientY};
 					interval = {"X":startSize.left,"Y":startSize.top};
 			}
 			let limit = null;
@@ -472,16 +474,17 @@ class CImage {
 			oCimageShadows[i].onmousedown = (e)=>{
 				if(this.disable || !this.options.allowNewSelect)
 					return;
+				let rect = this.options.element.getBoundingClientRect();
 				let eleSize = {
-					"width":this.options.element.offsetWidth,
-					"height":this.options.element.offsetHeight,
-					"left":this.getDocPos(this.options.element).left,
-					"top":this.getDocPos(this.options.element).top
+					"width":rect.width,
+					"height":rect.height,
+					"left":rect.left,
+					"top":rect.top
 				};
 				this.setReset();
 				oCimageShadows[0].style.display = 'block';
 				this.setPos(oCimageShadows[0],{"width":eleSize.width,"height":eleSize.height,"top":0,"left":0});
-				let startPos = {"X":e.pageX,"Y":e.pageY};
+				let startPos = {"X":e.clientX,"Y":e.clientY};
 				let interval = {"X":(startPos.X - eleSize.left),"Y":(startPos.Y - eleSize.top)}
 				let p = this.options.aspectRatio;
 				let limit = null;
@@ -497,7 +500,7 @@ class CImage {
 							This.options.onRelease();
 					}else{
 						This.setHandles();
-						if(this.isFunction(This.options.onSelect))
+						if(This.isFunction(This.options.onSelect))
 							This.options.onSelect();
 					}
 					document.removeEventListener('mousemove', fnMove, false);
@@ -742,15 +745,6 @@ class CImage {
 		}
 	}
 	// tool function
-	getDocPos(obj){
-		let pos = {"left":0,"top":0};
-		while(obj){
-			pos.left+=obj.offsetLeft;
-			pos.top+=obj.offsetTop;
-			obj=obj.offsetParent;
-		}
-		return pos;
-	}
 	isArray(obj){
 		return Object.prototype.toString.call(obj) == "[object Array]";
 	}
