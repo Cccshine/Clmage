@@ -63,11 +63,13 @@ class CImage {
 							<div class="cimage-shadow"></div>
 						</div>`;
 		if(this.options.hasPreview && this.options.aspectRatio){
+			eleHtml += `<div class="cimage-preview-box-wrap">`
 			for(let i=0;i<this.options.previewSize.length;i++){
 				eleHtml += `<div class="cimage-preview-box">
 							 <img class="cimage-preview" src="" alt="preview">
 						   </div>`;
-			}			
+			}	
+			eleHtml += `</div>`		
 		}
 		this.options.element.outerHTML = eleHtml;
 		this.options.element = document.getElementById(this.eleOriginId);
@@ -178,8 +180,7 @@ class CImage {
 				this.setShadows();
 				this.setPreview();
 				e.preventDefault();
-				if(this.options.onChange)
-					this.options.onChange();
+				this.isFunction(this.options.onChange) && this.options.onChange();
 			}
 		}
 
@@ -191,8 +192,8 @@ class CImage {
 			let eleSize = {
 				"width":rect.width,
 				"height":rect.height,
-				"left":rect.left,
-				"top":rect.top
+				"left":Math.ceil(rect.left),
+				"top":Math.ceil(rect.top)
 			};
 			let interval = {"X":(startPos.X - eleSize.left),"Y":(startPos.Y - eleSize.top)}
 			let p = this.options.aspectRatio;
@@ -206,13 +207,11 @@ class CImage {
 				if(This.clipBox.offsetWidth > 0 && This.clipBox.offsetHeight > 0){
 					if((This.options.minSize[0] && This.clipBox.offsetWidth < This.options.minSize[0])||(This.options.minSize[1] && This.clipBox.offsetHeight < This.options.minSize[1])){
 						This.setReset();
-						if(This.options.onRelease)
-							This.options.onRelease();
+						This.isFunction(This.options.onRelease) && This.options.onRelease();
 					}
 					else{
 						This.setHandles();
-						if(This.isFunction(This.options.onSelect))
-							This.options.onSelect();
+						This.isFunction(This.options.onSelect) && This.options.onSelect();
 					}
 				}
 				document.removeEventListener('mousemove', fnMove, false);
@@ -239,8 +238,7 @@ class CImage {
 				this.setShadows();
 				this.setPreview();
 				e.preventDefault();
-				if(this.options.onChange)
-					this.options.onChange();
+				this.isFunction(this.options.onChange) && this.options.onChange();
 			}
 		}
 		this.clipBox.addEventListener('mousedown', (e)=>{
@@ -393,8 +391,7 @@ class CImage {
 				this.setShadows();
 				this.setPreview();
 				e.preventDefault();
-				if(this.options.onChange)
-					this.options.onChange();
+				this.isFunction(this.options.onChange) && this.options.onChange();
 			}
 		}
 
@@ -409,8 +406,8 @@ class CImage {
 			let eleSize = {
 				"width":rect.width,
 				"height":rect.height,
-				"left":rect.left,
-				"top":rect.top
+				"left":Math.ceil(rect.left),
+				"top":Math.ceil(rect.top)
 			};
 			let startSize = {
 				"width":this.clipBox.offsetWidth,
@@ -478,8 +475,8 @@ class CImage {
 				let eleSize = {
 					"width":rect.width,
 					"height":rect.height,
-					"left":rect.left,
-					"top":rect.top
+					"left":Math.ceil(rect.left),
+					"top":Math.ceil(rect.top)
 				};
 				this.setReset();
 				oCimageShadows[0].style.display = 'block';
@@ -496,18 +493,17 @@ class CImage {
 				document.addEventListener('mouseup', function fnUp(){
 					if((This.clipBox.offsetWidth <= 0 && This.clipBox.offsetHeight <= 0)||(This.options.minSize[0] && This.clipBox.offsetWidth < This.options.minSize[0])||(This.options.minSize[1] && This.clipBox.offsetHeight < This.options.minSize[1])){
 						This.setReset();
-						if(This.options.onRelease)
-							This.options.onRelease();
+						This.isFunction(This.options.onRelease) && This.options.onRelease();
 					}else{
 						This.setHandles();
-						if(This.isFunction(This.options.onSelect))
-							This.options.onSelect();
+						This.isFunction(This.options.onSelect) && This.options.onSelect();
 					}
 					document.removeEventListener('mousemove', fnMove, false);
 					document.removeEventListener('mouseup', fnUp, false);
 				}, false);
 			}
 		}
+
 	}
 	// ----------------------------API
 	setImage(imgSrc, callback){
@@ -534,7 +530,7 @@ class CImage {
 		let h = p ? w/p : Math.abs(pos.y2-pos.y1);
 		let t = pos.y1;
 		let l = pos.x1;
-		if(pos.x1<0 || pos.x2<0 || pos.y2<0 || pos.y1 <0 || pos.x1>this.element.offsetWidth || pos.x2>this.element.offsetWidth || pos.y1>this.element.offsetHeight||pos.y2>this.element.offsetHeight){
+		if(pos.x1<0 || pos.x2<0 || pos.y2<0 || pos.y1 <0 || pos.x1>this.options.element.offsetWidth || pos.x2>this.options.element.offsetWidth || pos.y1>this.options.element.offsetHeight||pos.y2>this.options.element.offsetHeight){
 			alert('参数超出范围');
 			return;
 		}else if((this.options.minSize[0] && w < this.options.minSize[0]) || (this.options.minSize[1] && h < this.options.minSize[1])){
@@ -554,8 +550,7 @@ class CImage {
 		this.setBorders();
 		this.setShadows();
 		this.setHandles();
-		if(this.isFunction(this.options.onSelect))
-			this.options.onSelect();
+		this.isFunction(this.options.onSelect) && this.options.onSelect();
 	}
 	getSelectInfo(){
 		let width = this.clipBox.offsetWidth;
