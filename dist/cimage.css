@@ -7,8 +7,6 @@ div {
   float: left;
 }
 .cimage-main img {
-  width: 500px;
-  height: 500px;
   position: absolute;
   left: 0;
   top: 0;
@@ -73,13 +71,17 @@ div {
 .hd-nw {
   cursor: nw-resize;
 }
-.cimage-preview-box {
+.cimage-preview-box-wrap {
+  float: left;
+}
+.cimage-preview-box-wrap .cimage-preview-box {
   position: relative;
   float: left;
-  margin: 10px 0 0 30px;
+  margin: 10px 30px 0 0;
+  border-radius: 50%;
   overflow: hidden;
 }
-.cimage-preview-box .cimage-preview {
+.cimage-preview-box-wrap .cimage-preview-box .cimage-preview {
   position: absolute;
 }
 

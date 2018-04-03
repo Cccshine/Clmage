@@ -551,6 +551,7 @@ class CImage {
 		this.setShadows();
 		this.setHandles();
 		this.isFunction(this.options.onSelect) && this.options.onSelect();
+		this.isFunction(this.options.onChange) && this.options.onChange();
 	}
 	getSelectInfo(){
 		let width = this.clipBox.offsetWidth;
