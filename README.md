@@ -1,5 +1,5 @@
 # CImage
-demo查看：[ https://cccshine.github.io/ClipImg/demo]( https://cccshine.github.io/ClipImg/demo)
+demo查看：[ https://cccshine.github.io/CImage/demo]( https://cccshine.github.io/CImage/demo)
 
 ## Introduction
 基于原生`JavaScript`的图片截取插件，可预览截取效果
